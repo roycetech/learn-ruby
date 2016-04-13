@@ -1,6 +1,7 @@
 require 'logger'
-require './util/common'  
+require './util/Util'  
 require 'CSV'  
+
 include Util
 
 class MainClass
@@ -22,12 +23,10 @@ class MainClass
   def initialize
     super
     
-    @@logger.debug
-    
     today = Time.new
 
-    # @@filepath = '/Users/royce/Dropbox/Documents/Memorize/ruby/Ruby-Syntax.txt'
     @@filepath = '/Users/royce/Dropbox/Documents/Memorize/ruby/test.txt'
+    # @@filepath = '/Users/royce/Dropbox/Documents/Memorize/ruby/Ruby-Syntax.txt'
     
     source_filename = @@filepath[@@filepath.rindex('/') + 1 .. @@filepath.rindex('.')-1]
     simple_name = source_filename
@@ -50,7 +49,6 @@ def write_card(csv, front, back, tags, p_question_count, p_skipped_count)
         l_question_count = p_question_count + 1
 
         answer_only_html = %Q(<span style="font-weight: bold; background-color: #D9534F; color: white; border-radius: 5px; padding: 5px;">Answer Only</span>\n)
-        @@logger.debug("Answer HTML: %s" % answer_only_html)
 
         if tags.empty?
             tag_html = ''
@@ -63,13 +61,13 @@ def write_card(csv, front, back, tags, p_question_count, p_skipped_count)
 
         if is_front_only
             if @@is_unordered_list
-                lst = [tag_html + Util::to_html(front), answer_only_html + %Q(<div style="text-align: left;">
-<ul>
-                ) + Util::to_html_li(back) + '</ul></div>']
+                lst = [tag_html + Util::to_html(front), answer_only_html + %Q(<div style="text-align: left;"><code>
+<ul>) + Util::to_html_li(back) + '</ul></code></div>']
             elsif @@is_ordered_list
-                lst = [tag_html + Util::to_html(front), answer_only_html + %Q(<div style="text-align: left;">
-<ol>
-                ) + Util::to_html_li(back) + '</ol></div>']
+                lst = [tag_html + Util::to_html(front), answer_only_html + %Q(<div style="text-align: left; font-family: 'Courier New';">
+<ol>) + Util::to_html_li(back) + '</ol></div>']
+            elsif tags.include? 'Syntax'
+                lst = [tag_html + Util::to_html(front), answer_only_html + Util::to_code_html(back)]
             else
                 lst = [tag_html + Util::to_html(front), answer_only_html + Util::to_html(back)]
             end
@@ -82,7 +80,7 @@ def write_card(csv, front, back, tags, p_question_count, p_skipped_count)
 
         # tags w/o control tags like BF Only, and FB Only
         # real_tags = [tag for tag in tags if tag not in ['FB Only', 'BF Only', 'Syntax']]
-        real_tags = tags.select{ |tag| %w[FB\ Only BF Only Syntax].include? tag}
+        real_tags = tags.select{ |tag| !%w[FB\ Only BF Only Syntax].include? tag}
 
         if real_tags.empty?
             lst.push 'untagged'
@@ -94,7 +92,7 @@ def write_card(csv, front, back, tags, p_question_count, p_skipped_count)
         puts("Front: \n" + lst[0] + "\n\n")
         puts("Back: \n" + lst[1] + "\n\n")
         puts("Tag: \n" + lst[2] + "\n\n")
-
+        
        csv << lst
        
     return l_question_count, l_skipped_count
@@ -107,9 +105,7 @@ def execute
 
 File.open(@@filepath, 'r') do |f|
 CSV.open(@@outputFilename, 'w', { :col_sep => "\t" }) do |csv|
-    
-    
-    
+
     create_module = true
     space_counter = 0
     is_question = true

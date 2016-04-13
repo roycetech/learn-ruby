@@ -1,17 +1,56 @@
 module MyApp
-  
-  local_var = "royce"
-  
+
   def self.hello
-    # puts "Hello" + local_var
-    world
+    puts 'Hello'
+    # world
   end
 
   def world
-    puts "World" + local_var
+    puts 'World'
   end
-
   
 end
 
-MyApp::hello
+module MyUtil
+
+    class ObjUtil
+        def self.nvl(obj, when_null)
+            return obj.nil? ? when_null : obj
+        end
+    end
+
+end
+
+class MainClassWithInclude
+    
+    include MyUtil
+
+    def start
+        local = nil
+        # local = 'I It is set!'
+
+        puts ObjUtil.nvl(local, 'I Local unset!')
+    end
+end
+
+class MainClass
+    
+    def start
+
+        # local = nil
+        local = 'It is set!'
+
+
+        puts MyUtil::ObjUtil.nvl(local, 'Local unset!')
+    end
+end
+
+# main = MainClass.new
+# main = MainClassWithInclude.new
+# main.start
+
+
+mod = MyApp.new
+
+mod.hello
+
