@@ -1,0 +1,15 @@
+target
+.DS_Store
+.settings
+.classpath
+.project
+bin
+.eclipse-pmd
+.metadata
+.recommenders
+.gradle
+build
+bootstrap3/css
+bootstrap3/js
+bootstrap3/fonts
+

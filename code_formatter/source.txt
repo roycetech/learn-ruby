@@ -1,0 +1,10 @@
+source = "source.txt"
+
+# Testing ruby codes
+File.open(source, 'r') do |file|
+
+     while line = file.gets
+         puts(line)  # print it out
+     end
+
+end
