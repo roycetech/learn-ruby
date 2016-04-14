@@ -7,7 +7,8 @@ include HtmlUtilRuby
 module Util
 
 
-    COMMENT_COLOR = '#417E60'
+    COLOR_COMMENT = '#417E60'
+    COLOR_CLASSVAR = '#426F9C'    
 
     def to_html(array)
         
@@ -25,8 +26,14 @@ module Util
     def to_code_html(array)
         
         str_builder = array.inject('') do |result, element|
-          result += "\n" unless result.empty?
-          result += HtmlUtilRuby::highlight_all(to_html_raw(element))
+            result += "\n" unless result.empty?
+        
+            highlighted = HtmlUtilRuby::highlight_all(to_html_raw(element))
+            if result.end_with? "</span>\n" and highlighted.start_with? "<span"
+                result += '<br />' + highlighted
+            else
+                result += highlighted
+            end
         end
 
         return (
@@ -88,7 +95,7 @@ EOL
 
         return array.inject('') do |result, element|
             unless result.empty?
-                result += '<span style="width: 1px">&nbsp;</span>'
+                result += '<span>&nbsp;</span>'
             end
 
             unless ['FB Only', 'BF Only', 'Syntax'].include? element

@@ -43,57 +43,68 @@ class MainClass
 
 def write_card(csv, front, back, tags, p_question_count, p_skipped_count)
 
+    if back[-1] == ''
+        back.pop
+    end
+
+    if tags.include? 'EnumU' or tags.include? 'EnumO'
+        multi_tag = 'Multi:%s' % back.size
+        if !tags.include? multi_tag
+            tags.push(multi_tag)
+        end
+    end
+
     l_question_count = p_question_count
     l_skipped_count = p_skipped_count
 
-        l_question_count = p_question_count + 1
+    l_question_count = p_question_count + 1
 
-        answer_only_html = %Q(<span style="font-weight: bold; background-color: #D9534F; color: white; border-radius: 5px; padding: 5px;">Answer Only</span>\n)
+    answer_only_html = %Q(<span style="font-weight: bold; background-color: #D9534F; color: white; border-radius: 5px; padding: 5px;">Answer Only</span>\n)
 
-        if tags.empty?
-            tag_html = ''
-        else
-            tag_html = %Q(<div style="text-align: left;">%s</div>\n) % Util::array_to_string(tags)
-        end
+    # tags w/o control tags like BF Only, and FB Only
+    # real_tags = [tag for tag in tags if tag not in ['FB Only', 'BF Only', 'Syntax']]
+    real_tags = tags.select{ |tag| !%w[FB\ Only BF Only Syntax].include? tag}
 
-        front_only_tags = %w[FB\ Only Enum Practical Bool Code Abbr Syntax EnumU EnumO]
-        is_front_only = tags.select {|element| front_only_tags.include? element}.size > 0
+    if real_tags.empty?
+        tag_html = ''
+    else
+        tag_html = %Q(<div style="text-align: left;">%s</div>\n) % Util::array_to_string(tags)
+    end
 
-        if is_front_only
-            if @@is_unordered_list
-                lst = [tag_html + Util::to_html(front), answer_only_html + %Q(<div style="text-align: left;"><code>
+    front_only_tags = %w[FB\ Only Enum Practical Bool Code Abbr Syntax EnumU EnumO]
+    is_front_only = tags.select {|element| front_only_tags.include? element}.size > 0
+
+    if is_front_only
+        if @@is_unordered_list
+            lst = [tag_html + Util::to_html(front), answer_only_html + %Q(<div style="text-align: left;"><code>
 <ul>) + Util::to_html_li(back) + '</ul></code></div>']
-            elsif @@is_ordered_list
-                lst = [tag_html + Util::to_html(front), answer_only_html + %Q(<div style="text-align: left; font-family: 'Courier New';">
+        elsif @@is_ordered_list
+            lst = [tag_html + Util::to_html(front), answer_only_html + %Q(<div style="text-align: left; font-family: 'Courier New';">
 <ol>) + Util::to_html_li(back) + '</ol></div>']
-            elsif tags.include? 'Syntax'
-                lst = [tag_html + Util::to_html(front), answer_only_html + Util::to_code_html(back)]
-            else
-                lst = [tag_html + Util::to_html(front), answer_only_html + Util::to_html(back)]
-            end
-
-        elsif  tags.include? 'BF Only'
-            lst = [answer_only_html + Util::to_html(front), tag_html + Util::to_html(back)]
+        elsif tags.include? 'Syntax'
+            lst = [tag_html + Util::to_html(front), answer_only_html + Util::to_code_html(back)]
         else
-            lst = [tag_html + Util::to_html(front),  Util::to_html(back)]
+            lst = [tag_html + Util::to_html(front), answer_only_html + Util::to_html(back)]
         end
 
-        # tags w/o control tags like BF Only, and FB Only
-        # real_tags = [tag for tag in tags if tag not in ['FB Only', 'BF Only', 'Syntax']]
-        real_tags = tags.select{ |tag| !%w[FB\ Only BF Only Syntax].include? tag}
+    elsif  tags.include? 'BF Only'
+        lst = [answer_only_html + Util::to_html(front), tag_html + Util::to_html(back)]
+    else
+        lst = [tag_html + Util::to_html(front),  Util::to_html(back)]
+    end
 
-        if real_tags.empty?
-            lst.push 'untagged'
-            @@untagged_count += 1
-        else
-            lst.push tags.join(',')
-        end
+    if real_tags.empty?
+        lst.push 'untagged'
+        @@untagged_count += 1
+    else
+        lst.push tags.join(',')
+    end
 
-        puts("Front: \n" + lst[0] + "\n\n")
-        puts("Back: \n" + lst[1] + "\n\n")
-        puts("Tag: \n" + lst[2] + "\n\n")
-        
-       csv << lst
+    puts("Front: \n" + lst[0] + "\n\n")
+    puts("Back: \n" + lst[1] + "\n\n")
+    puts("Tag: \n" + lst[2] + "\n\n")
+    
+   csv << lst
        
     return l_question_count, l_skipped_count
 end                               
@@ -103,8 +114,8 @@ def execute
   @@logger.info "Program Start."
                              
 
-File.open(@@filepath, 'r') do |f|
-CSV.open(@@outputFilename, 'w', { :col_sep => "\t" }) do |csv|
+    File.open(@@filepath, 'r') do |f|
+    CSV.open(@@outputFilename, 'w', { :col_sep => "\t" }) do |csv|
 
     create_module = true
     space_counter = 0
@@ -120,7 +131,7 @@ CSV.open(@@outputFilename, 'w', { :col_sep => "\t" }) do |csv|
 
     while line = f.gets
 
-        line = line.rstrip()
+        line.rstrip!
 
         unless card_began
             if line[0, 1] == '#' or line.strip.empty?
@@ -130,7 +141,7 @@ CSV.open(@@outputFilename, 'w', { :col_sep => "\t" }) do |csv|
             end
         end
 
-        if line.strip() == ''
+        if line == ''
             space_counter += 1
         end
 
@@ -144,17 +155,6 @@ CSV.open(@@outputFilename, 'w', { :col_sep => "\t" }) do |csv|
         if is_question
 
             if space_counter >= 2  # write to file
-
-                if tags.include? 'EnumU' or tags.include? 'EnumO'
-                    multi_tag = 'Multi:%s' % back.size
-                    if !tags.include? multi_tag
-                        tags.push(multi_tag)
-                    end
-                end
-
-                if back[-1] == ''
-                    back.pop
-                end
 
                 front_count, ignored_count = write_card(csv, front, back, tags, front_count, ignored_count)
 
@@ -198,7 +198,7 @@ CSV.open(@@outputFilename, 'w', { :col_sep => "\t" }) do |csv|
 
         end
     end
-
+    
     front_count, ignored_count = write_card(csv, front, back, tags, front_count, ignored_count)
 
     puts("Total questions: %s" % front_count)

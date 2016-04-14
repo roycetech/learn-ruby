@@ -4,9 +4,12 @@ require_relative 'ObjUtil.rb'
 
 module HtmlUtilRuby
 
+    COLOR_COMMENT = '#417E60'
+    COLOR_CLASSVAR = '#426F9C'
+
     KEYWORDS = %w[BEGIN class ensure nil self when
-     END def false not super while
-     alias defined for or then yield
+     END def false not super while < > <= >= %
+     alias defined for or then yield = !=
      and do if redo true begin else
      in rescue undef break elsif module
      retry unless case end next return until]
@@ -22,7 +25,7 @@ module HtmlUtilRuby
                 string.sub!(Regexp.new(keyword), '<span style="color: #7E0854">' + keyword + '</span>')
             end
         end        
-        string.sub!('</span>', "</span><br />") if string.end_with? '</span>' and not string.start_with? '<span'
+        # string.sub!('</span>', "</span><br />") if string.end_with? '</span>' and not string.start_with? '<span'
     end
 
     def self.highlight_symbol(string)
@@ -33,17 +36,13 @@ module HtmlUtilRuby
     end
 
     def self.highlight_double_quote(string)
-        pattern = Regexp.new %Q|"[^"\\\r\n]*(?:\\.[^"\\\r\n]*)*"|
-        if pattern =~ string
-            string.sub!(pattern, '<span style="color: #1324BF">' + string[pattern] + '</span>')
-        end
+        pattern = %r|("[^"\\\r\n]*(?:\\.[^"\\\r\n]*)*")|
+        string.gsub!(pattern, %q(<span style='color: #1324BF'>\1</span>))
     end
 
     def self.highlight_single_quote(string)
-        pattern = Regexp.new %Q|'[^"\\\r\n]*(?:\\.[^"\\\r\n]*)*'|
-        if pattern =~ string
-            string.sub!(pattern, '<span style="color: #1324BF">' + string[pattern] + '</span>')
-        end
+        pattern = %r|('[^"\\\r\n]*(?:\\.[^"\\\r\n]*)*')|
+        string.gsub!(pattern, %q(<span style='color: #1324BF'>\1</span>))
     end
 
     def self.highlight_comment(string)
@@ -74,6 +73,16 @@ module HtmlUtilRuby
     end
 
 =begin
+    highlight instance and class variables
+=end
+    def self.highlight_variable(string)
+        pattern = /@[@a-z_A-Z]*\s/
+        if pattern =~ string
+            string.sub!(pattern, '<span style="color: %s">' %  COLOR_CLASSVAR + string[pattern] + '</span>')
+        end
+    end
+
+=begin
     Some spaces adjacent to tags need to be converted because it is not honored by
     <pre> tag.
 =end
@@ -100,8 +109,9 @@ module HtmlUtilRuby
         highlight_single_quote(string)
         highlight_keyword(string)
         highlight_symbol(string)
-        highlight_comment_br(string)
+        highlight_comment(string)
         highlight_block_param(string)
+        highlight_variable(string)
         space_to_nbsp(string)
         string
     end
