@@ -29,7 +29,7 @@ class HtmlBuilder
     return self
   end
 
-  def sp
+  def space
       @value += ESP
       return self
   end

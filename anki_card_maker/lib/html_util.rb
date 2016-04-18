@@ -12,15 +12,6 @@ module HtmlUtil
   HEC_LT = '&lt;'
   HEC_GT = '&gt;'
 
-  MAIN_DIV = HtmlBuilder.new
-  .div('main')
-  .str
-  .div_e
-  .build
-
-  HTML_LI = HtmlBuilder.new
-  .li.str.li_e
-  .build
 
   def self.to_html(array)
     str_builder = array.inject('') do |result, element|
@@ -29,10 +20,10 @@ module HtmlUtil
     end
 
     return HtmlBuilder.new
-    .div
-    .str.lf
-    .div_e
-    .build % str_builder
+      .div
+        .text(str_builder).lf
+      .div_e
+    .build
   end
 
 
@@ -51,10 +42,10 @@ module HtmlUtil
     end
 
     return  HtmlBuilder.new
-    .div
-    .pr.str.pr_e
-    .div_e
-    .build % str_builder
+      .div
+        .pr.text(str_builder).pr_e
+      .div_e
+    .build
   end
 
 
@@ -64,19 +55,14 @@ module HtmlUtil
       result += to_html_raw(element)
     end
 
-    html_builder = HtmlBuilder.new
+    return html_builder = HtmlBuilder.new
       .div
-      .pre('fig')
-
-
-  
-  .pre_e
-  .div_e
-  .build
-
-    return HTML_FIG % str_builder
+        .pre('fig')
+          .text(str_builder).lf  
+        .pre_e
+      .div_e
+    .build
   end
-
 
   def self.to_html_raw(string)
     return string
@@ -105,30 +91,24 @@ module HtmlUtil
     array.each do |element|
       li_text = HtmlRubyUtil.highlight_comment(to_html_nbsp(element))
       html_builder
-      .li.text(li_text)
-      .li_e
+        .li.text(li_text).li_e
     end
   end
 
   def self.create_tags(tags)
 
     html_builder = HtmlBuilder.new
-    .div('tag')
+      .div
 
     first = true
     tags.each do |tag|
-      html_builder.sp unless first
-
-      # , 'Syntax'
-      unless ['FB Only', 'BF Only'].include? tag
-        html_builder.span.text(tag).span_e
-      end
+      html_builder.space unless first
+      html_builder.span('tag').text(tag).span_e
       first = false
     end
 
-    return html_builder
-    .lf
-    .div_e
+    return html_builder.lf
+      .div_e
     .build
 
   end

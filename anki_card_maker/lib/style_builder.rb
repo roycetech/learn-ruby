@@ -13,7 +13,7 @@ class StyleBuilder
     return self
   end
 
-  def eselect
+  def select_e
 
     @prop_names.sort!
     @prop_names.each do |name|
@@ -30,7 +30,7 @@ class StyleBuilder
   end
 
 
-  def estyle
+  def style_e
     @value += "</style>\n"
     @html_builder.merge(@value)
     return @html_builder
