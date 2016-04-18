@@ -9,7 +9,4 @@ bin
 .recommenders
 .gradle
 build
-bootstrap3/css
-bootstrap3/js
-bootstrap3/fonts
-
+.idea
