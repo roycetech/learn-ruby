@@ -1,5 +1,6 @@
 module ObjUtil
 
+
   def self.nvl(arg1, when_null)
     # return when_null unless arg1
     return arg1.nil? ? when_null : arg1

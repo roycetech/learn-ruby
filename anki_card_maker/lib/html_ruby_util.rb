@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require './lib/obj_util'
 
 module HtmlRubyUtil
@@ -84,7 +82,7 @@ module HtmlRubyUtil
     pattern_between_tag = /> +</
     while pattern_between_tag =~ string
       lost_spaces = string[pattern_between_tag]
-      string.sub!(pattern_between_tag, '>' + ('&nbsp;' * (lost_spaces.length - 2)) + '<')
+      string.sub!(pattern_between_tag, '>' + (HtmlBuilder::ESP * (lost_spaces.length - 2)) + '<')
     end
 
     pattern_before_tag = /^\s+</

@@ -1,7 +1,9 @@
 class TagHelper
 
+
   HIDDEN = %w(FB\ Only BF Only Syntax Code(Front))
   FRONT_ONLY = %w[FB\ Only Enum Practical Bool Code Abbr Syntax EnumU EnumO]
+
 
   def initialize(tags)
     @tags = tags
