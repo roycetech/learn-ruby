@@ -7,7 +7,7 @@ require './lib/html_ruby_util'
 # 2. Specific Style for front then back
 # 3. Common Html
 # 4. Specific Html
-
+# Don't show tags for one-sided cards
 class HtmlHelper
 
 
@@ -73,16 +73,18 @@ class HtmlHelper
     html_builder_front.style_e
     html_builder_back.style_e
 
-    #  Step 3: Common Style
+    #  Step 3: Common HTML
     html_builder_common2 = HtmlBuilder.new
       .div.lf
 
     tags = build_tags
-
-    html_builder_common2.merge(tags) unless shown_tags.empty?
-
+    
     # Process Front Card Html
     html_builder_front.merge(html_builder_common2)
+
+    unless tag_helper.is_back_only?
+      html_builder_front.merge(tags)
+    end
 
     if tag_helper.code_front?
       if front_array.length == 1
@@ -108,6 +110,9 @@ class HtmlHelper
 
     # Process Back Card Html
     html_builder_back.merge(html_builder_common2)
+    unless tag_helper.is_front_only?
+      html_builder_back.merge(tags)
+    end
 
     if tag_helper.has_enum?
       html_builder_back
@@ -180,8 +185,6 @@ class HtmlHelper
       result += "\n" unless result.empty?
       highlighted = HtmlRubyUtil.highlight_all(to_html_raw(element))
       
-puts('====== ' + to_html_raw(element))
-puts('>>>>>> ' + highlighted)
       if result.end_with? "</span>\n" and highlighted.start_with? "<span"
         result += HtmlBuilder::BR + highlighted
       else

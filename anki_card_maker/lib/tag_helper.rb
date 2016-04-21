@@ -1,7 +1,7 @@
 class TagHelper
 
 
-  HIDDEN = %w(FB\ Only BF Only Syntax Code(Front))
+  HIDDEN = %w(FB\ Only BF\ Only Code(Front))
   FRONT_ONLY = %w[FB\ Only Enum Practical Bool Code Abbr Syntax EnumU EnumO]
 
 
@@ -39,6 +39,10 @@ class TagHelper
 
   def include?(tag)
     return @tags.include? tag
+  end
+
+  def one_sided?
+    is_front_only? or is_back_only?
   end
 
   def is_front_only?
