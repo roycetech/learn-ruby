@@ -129,6 +129,7 @@ class HtmlHelper
             .text(highlight_code(back_array))
           .pre_e.lf
       else
+
         html_builder_back
           .pre
             .text(highlight_code(back_array)).lf
@@ -174,10 +175,13 @@ class HtmlHelper
   end
 
 
-  def highlight_code(front_array)
-    return front_array.inject('') do |result, element|
+  def highlight_code(array)
+    return array.inject('') do |result, element|
       result += "\n" unless result.empty?
       highlighted = HtmlRubyUtil.highlight_all(to_html_raw(element))
+      
+puts('====== ' + to_html_raw(element))
+puts('>>>>>> ' + highlighted)
       if result.end_with? "</span>\n" and highlighted.start_with? "<span"
         result += HtmlBuilder::BR + highlighted
       else

@@ -28,11 +28,12 @@ module HtmlRubyUtil
       keyword_index = ObjUtil.nvl(string.index(keyword), -1)
 
       non_comment = keyword_index <= comment_index
-      has_keyword = Regexp.new('\b' + Regexp.quote(keyword) + '\b') =~ string
+      pattern = Regexp.new('\b' + Regexp.quote(keyword) + '\b')
+      has_keyword = pattern =~ string
 
       # favor readability over
-      if  non_comment and has_keyword
-        string.gsub!(Regexp.new(keyword), @@html_color.keyword(keyword))
+      if non_comment and has_keyword
+        string.gsub!(pattern, @@html_color.keyword(keyword))
       end
 
     end
@@ -42,6 +43,13 @@ module HtmlRubyUtil
   def self.highlight_quoted(string)
     pattern = %r{(["'])(\\\1|[^\1]*?)\1}
     string.gsub!(pattern, @@html_color.quote('\1\2\1'))
+    return string
+  end
+
+  def self.highlight_identifier(string)
+    # pattern = %r{&lt;([a-zA-z0-9_ ]*)&gt;}
+    pattern = %r{&lt;([\wa-zA-Z0-9_ ]*(?:\|[a-zA-Z0-9_ ]*)*)&gt;}
+    string.gsub!(pattern, '&lt;' + @@html_color.identifier('\1') + '&gt;')
     return string
   end
 
@@ -100,6 +108,7 @@ module HtmlRubyUtil
     highlight_comment(string)
     highlight_block_param(string)
     highlight_variable(string)
+    highlight_identifier(string)
     space_to_nbsp(string)
     string
 
