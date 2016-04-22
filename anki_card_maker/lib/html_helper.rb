@@ -48,7 +48,6 @@ class HtmlHelper
     html_builder_front = HtmlBuilder.new(style_common)
     html_builder_back = HtmlBuilder.new(style_common)
 
-
     answer_only_style = StyleBuilder.new
       .select('span.answer_only')
         .font_weight('bold')
@@ -60,6 +59,14 @@ class HtmlHelper
 
     html_builder_front.merge(answer_only_style) if tag_helper.is_back_only?
     html_builder_back.merge(answer_only_style) if tag_helper.is_front_only?
+
+    if tag_helper.command?
+      html_builder_front.merge(StyleBuilder.new
+        .select('code.command')
+          .color('white')
+          .background_color('black')
+        .select_e)
+    end
 
     if tag_helper.include? 'Figure'
       html_builder_back.merge(
@@ -77,7 +84,7 @@ class HtmlHelper
     html_builder_common2 = HtmlBuilder.new
       .div.lf
 
-    tags = build_tags
+    tags = build_tags(back_array)
     
     # Process Front Card Html
     html_builder_front.merge(html_builder_common2)
@@ -99,6 +106,23 @@ class HtmlHelper
           .pre_e
       end
 
+    elsif tag_helper.command?
+        html_builder_front
+          .div.lf
+            .code('command')
+
+        # front_array.each do |element|
+        #   html_builder_front.text(element).lf
+        # end
+
+        html_builder_front.text(front_array.inject('') do |result, element|
+          result += HtmlBuilder::BR + "\n" unless result.empty?
+          result += to_html_raw(element)
+        end).lf
+
+        html_builder_front
+          .code_e.lf
+          .div_e.lf
     else
       
       html_builder_front.br.text(front_array.inject('') do |result, element|
@@ -111,7 +135,7 @@ class HtmlHelper
     # Process Back Card Html
     html_builder_back.merge(html_builder_common2)
     unless tag_helper.is_front_only?
-      html_builder_back.merge(tags)
+      html_builder_back.merge(tags.br)
     end
 
     if tag_helper.has_enum?
@@ -157,7 +181,12 @@ class HtmlHelper
       end).lf
     end
 
-    html_builder_front.merge(ANSWER_ONLY_HTML) if tag_helper.is_back_only?
+
+    frontAnswer = ANSWER_ONLY_HTML.clone
+    front.insert(HtmlBuilder::Tag_BR) if html_builder_front.last_tag == HtmlBuilder::Tag_Span_E
+    ANSWER_ONLY_HTML.insert(HtmlBuilder::Tag_BR) if html_builder_back.last_tag == HtmlBuilder::Tag_Span_E
+
+    html_builder_front.merge(frontAnswer) if tag_helper.is_back_only?
     html_builder_back.merge(ANSWER_ONLY_HTML) if tag_helper.is_front_only?
 
     @front_html = html_builder_front.div_e.lf.build
@@ -168,9 +197,10 @@ class HtmlHelper
   private
 
   # build the tags html. <span>tag1</span>&nbsp;<span>tag2</span>...
-  def build_tags
+  def build_tags(card)
     first = true
     tags_html = HtmlBuilder.new
+    @tag_helper.find_multi(card)
     @tag_helper.visible_tags.each do |tag|
       tags_html.space unless first
       tags_html.span('tag').text(tag).span_e

@@ -30,8 +30,8 @@ class MainClass
     @reviewer = Reviewer.new
 
     hash = {
-      :source_file => '/Users/royce/Dropbox/Documents/Reviewer/ruby/Ruby-Syntax.txt'
-      # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/ruby/test.txt'
+      # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/mean/Mean-NPM.txt'
+      :source_file => '/Users/royce/Dropbox/Documents/Reviewer/@test.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/design/UML.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/design/test.txt'
     }.merge(opts);

@@ -28,7 +28,9 @@ module HtmlRubyUtil
       keyword_index = ObjUtil.nvl(string.index(keyword), -1)
 
       non_comment = keyword_index <= comment_index
-      pattern = Regexp.new('\b' + Regexp.quote(keyword) + '\b')
+      # pattern = Regexp.new('\b' + Regexp.quote(keyword) + '\b')
+      pattern = Regexp.new('^[^#]*(' + Regexp.quote(keyword) + ')')
+
       has_keyword = pattern =~ string
 
       # favor readability over
@@ -109,6 +111,7 @@ module HtmlRubyUtil
     highlight_block_param(string)
     highlight_variable(string)
     highlight_identifier(string)
+
     space_to_nbsp(string)
     string
 

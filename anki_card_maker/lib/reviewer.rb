@@ -38,7 +38,12 @@ class Reviewer
       sentence_count = back_array.inject(0) do
       |total, element|
         total +=
-            element.gsub('e.g.', '').gsub('...', '').gsub('..', '').count('.')
+            element.downcase.gsub('e.g.', '')
+              .gsub('...', '')
+              .gsub('..', '')
+              .gsub('node.js', 'nodejs')
+              .gsub('package.json', 'packagejson')
+              .count('.')
       end
     end
 

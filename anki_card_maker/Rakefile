@@ -12,6 +12,7 @@ task :default => [:run]
 
 
 task :run do
+  # ruby './bin/temp_class.rb'
   ruby './bin/main_class.rb'
   # ruby './lib/html_ruby_util.rb'
   # ruby './lib/html_builder.rb'

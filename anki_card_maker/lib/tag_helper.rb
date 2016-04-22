@@ -7,9 +7,6 @@ class TagHelper
 
   def initialize(tags)
     @tags = tags
-    @visible_tags = @tags.select do |tag|
-      !HIDDEN.include? tag
-    end
 
     @front_only = @tags.select do |tag|
       FRONT_ONLY.include? tag
@@ -53,8 +50,14 @@ class TagHelper
     @back_only
   end
 
+  def command?
+    @tags.include? 'Command'
+  end
+
   def visible_tags
-    @visible_tags
+    @tags.select do |tag|
+      !HIDDEN.include? tag
+    end
   end
 
   def figure?
@@ -78,7 +81,7 @@ class TagHelper
   end
 
   def untagged?
-    return @visible_tags.empty?
+    return visible_tags.empty?
   end
 
   def has_enum?

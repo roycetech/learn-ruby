@@ -8,6 +8,15 @@ require 'logger'
 class HtmlBuilder
 
 
+  SpecialTags = %w(text lf space br style style_e)
+  Tag_Span_E = 'span_e'
+  Tag_BR = 'br'
+
+  BR = '<br />'
+  ESP = '&nbsp;'
+  LF = "\n"
+
+
   @@logger = Logger.new(STDOUT)
   
 
@@ -19,12 +28,7 @@ class HtmlBuilder
   end
 
 
-  BR = '<br />'
-  ESP = '&nbsp;'
-  LF = "\n"
-
-
-  attr_reader :styled
+  attr_reader :styled, :last_tag
 
 
   def initialize(html_builder = nil)
@@ -103,12 +107,10 @@ class HtmlBuilder
     last_tag_closed = nil
     last_lfed = false  # last tag invoked new line
 
-    special = %w(text lf space br style style_e)
-
     self.each_with_value do |tag, value|
 
       is_open_tag = !tag.include?('_')
-      unless special.include?(tag)
+      unless SpecialTags.include?(tag)
         do_indent = level > 0  && last_lfed
         if is_open_tag
           return_value += ' ' * (2 * level) if do_indent
@@ -151,7 +153,7 @@ class HtmlBuilder
 
       end
 
-      last_tag = tag unless special.include?(tag)
+      last_tag = tag unless SpecialTags.include?(tag)
       last_lfed = %q(lf br).include?(tag)
 
     end  # each loop
@@ -170,17 +172,24 @@ class HtmlBuilder
       else
         @values.push(args[0])
       end
+
+      @last_tag = meth.to_s unless SpecialTags.include? meth.to_s
+
       return self
     else
       super
     end    
   end
 
-
   def size
     return @values.size
   end
 
+  def insert(tag, value=nil)
+    @tags.insert(tag)
+    @values.insert(value)
+    return self
+  end
 
   protected
 
