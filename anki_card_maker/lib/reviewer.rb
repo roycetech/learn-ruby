@@ -38,7 +38,9 @@ class Reviewer
       sentence_count = back_array.inject(0) do
       |total, element|
         total +=
-            element.downcase.gsub('e.g.', '')
+            element.downcase
+              .gsub('e.g.', 'eg')
+              .gsub('i.e', 'ie')
               .gsub('...', '')
               .gsub('..', '')
               .gsub('node.js', 'nodejs')
@@ -50,7 +52,7 @@ class Reviewer
     if sentence_count > 1 and not tag_helper.has_enum?
       multi_tag = 'Multi:%s' % sentence_count
       if not tag_helper.include? multi_tag
-        tag_helper.add(multi_tag)
+        tag_helper.add(multi_tag) unless tag_helper.has_enum?
         @all_multi.push(front_array.join("\n") + '(%d)' % sentence_count) if sentence_count > 1
       end
     end

@@ -30,8 +30,9 @@ class MainClass
     @reviewer = Reviewer.new
 
     hash = {
+      :source_file => '/Users/royce/Dropbox/Documents/Reviewer/ruby/Ruby-Keyword.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/mean/Mean-NPM.txt'
-      :source_file => '/Users/royce/Dropbox/Documents/Reviewer/@test.txt'
+      # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/@test.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/design/UML.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/design/test.txt'
     }.merge(opts);
@@ -56,7 +57,7 @@ class MainClass
   end
 
   def execute
-    $logger.info 'Program Start. Unit Test: %s' % $unit_test 
+    $logger.info 'Program Start. Unit Test: %s' % ($unit_test ? 'Y' : 'n')
     return if $unit_test 
 
     File.open(@@filepath, 'r') do |file|
@@ -79,9 +80,8 @@ class MainClass
   def write_card(csv, front, back, tags)
 
     tag_helper = TagHelper.new(tags)
-    tag_helper.find_multi(back)
-
     back.pop if back[-1] == ''
+    tag_helper.find_multi(back)
 
     shown_tags = tag_helper.visible_tags
     @reviewer.count_sentence(tag_helper, front, back)

@@ -184,7 +184,8 @@ class HtmlHelper
 
     frontAnswer = ANSWER_ONLY_HTML.clone
     front.insert(HtmlBuilder::Tag_BR) if html_builder_front.last_tag == HtmlBuilder::Tag_Span_E
-    ANSWER_ONLY_HTML.insert(HtmlBuilder::Tag_BR) if html_builder_back.last_tag == HtmlBuilder::Tag_Span_E
+
+    ANSWER_ONLY_HTML.insert(HtmlBuilder::Tag_BR) if html_builder_back.last_tag == HtmlBuilder::Tag_Span_E or html_builder_back.last_element == 'text'
 
     html_builder_front.merge(frontAnswer) if tag_helper.is_back_only?
     html_builder_back.merge(ANSWER_ONLY_HTML) if tag_helper.is_front_only?

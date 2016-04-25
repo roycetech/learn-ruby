@@ -28,7 +28,8 @@ class HtmlBuilder
   end
 
 
-  attr_reader :styled, :last_tag
+  # last_element includes text and br
+  attr_reader :styled, :last_tag, :last_element
 
 
   def initialize(html_builder = nil)
@@ -174,6 +175,7 @@ class HtmlBuilder
       end
 
       @last_tag = meth.to_s unless SpecialTags.include? meth.to_s
+      @last_element = meth.to_s unless ['lf', 'space'].include? meth.to_s
 
       return self
     else
