@@ -39,6 +39,7 @@ class Reviewer
       |total, element|
         total +=
             element.downcase
+              .gsub('.h', 'h')  # c header.
               .gsub('e.g.', 'eg')
               .gsub('i.e', 'ie')
               .gsub('...', '')

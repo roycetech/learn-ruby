@@ -30,9 +30,9 @@ class MainClass
     @reviewer = Reviewer.new
 
     hash = {
-      :source_file => '/Users/royce/Dropbox/Documents/Reviewer/ruby/Ruby-Keyword.txt'
+      # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/ruby/Ruby-Keyword.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/mean/Mean-NPM.txt'
-      # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/@test.txt'
+      :source_file => '/Users/royce/Dropbox/Documents/Reviewer/@test.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/design/UML.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/design/test.txt'
     }.merge(opts);
@@ -99,7 +99,7 @@ class MainClass
     end
 
     if $logger.debug?
-      $logger.debug("Front: \n" + lst[0] + "\n\n")
+      # $logger.debug("Front: \n" + lst[0] + "\n\n")
       $logger.debug("Back: \n" + lst[1] + "\n\n")
       # @@logger.debug("Tag: \n" + lst[2] + "\n\n")
     end

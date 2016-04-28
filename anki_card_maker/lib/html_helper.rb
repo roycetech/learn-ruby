@@ -134,9 +134,9 @@ class HtmlHelper
 
     # Process Back Card Html
     html_builder_back.merge(html_builder_common2)
-    unless tag_helper.is_front_only?
-      html_builder_back.merge(tags.br)
-    end
+    # unless tag_helper.is_front_only?
+    #   html_builder_back.merge(tags.br)
+    # end
 
     if tag_helper.has_enum?
       html_builder_back
@@ -175,21 +175,28 @@ class HtmlHelper
         .pre_e.lf
     
     else
+
       html_builder_back.text(back_array.inject('') do |result, element|
+
         result += HtmlBuilder::BR + "\n" unless result.empty?
         result += to_html_raw(element)
       end).lf
     end
 
 
-    frontAnswer = ANSWER_ONLY_HTML.clone
-    front.insert(HtmlBuilder::Tag_BR) if html_builder_front.last_tag == HtmlBuilder::Tag_Span_E
 
-    ANSWER_ONLY_HTML.insert(HtmlBuilder::Tag_BR) if html_builder_back.last_tag == HtmlBuilder::Tag_Span_E or html_builder_back.last_element == 'text'
+    if tag_helper.is_front_only?
+      backAnswer = ANSWER_ONLY_HTML.clone
+      backAnswer.insert(HtmlBuilder::Tag_BR)  if html_builder_back.last_tag == HtmlBuilder::Tag_Span_E or html_builder_back.last_element == 'text'
+      html_builder_back.merge(backAnswer)
+    end
 
-    html_builder_front.merge(frontAnswer) if tag_helper.is_back_only?
-    html_builder_back.merge(ANSWER_ONLY_HTML) if tag_helper.is_front_only?
-
+    if tag_helper.is_back_only?
+      frontAnswer = ANSWER_ONLY_HTML.clone
+      frontAnswer.insert(HtmlBuilder::Tag_BR)  if html_builder_front.last_tag == HtmlBuilder::Tag_Span_E or html_builder_front.last_element == 'text'
+      html_builder_front.merge(frontAnswer)
+    end
+  
     @front_html = html_builder_front.div_e.lf.build
     @back_html = html_builder_back.div_e.lf.build
   end

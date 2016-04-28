@@ -188,8 +188,8 @@ class HtmlBuilder
   end
 
   def insert(tag, value=nil)
-    @tags.insert(tag)
-    @values.insert(value)
+    @tags.insert(0, tag)
+    @values.insert(0, value)
     return self
   end
 
