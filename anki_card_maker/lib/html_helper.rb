@@ -1,5 +1,5 @@
 require './lib/html_builder'
-require './lib/html_ruby_util'
+require './lib/base_highlighter'
 
 
 # Build Sequence:
@@ -25,6 +25,7 @@ class HtmlHelper
   def initialize(tag_helper, front_array, back_array)
 
     @tag_helper = tag_helper
+    @highlighter = BaseHighlighter.js
 
     #  Step 1: Common Style
     style_common = HtmlBuilder.new
@@ -144,7 +145,7 @@ class HtmlHelper
 
       html_builder_back.__send__(tag_helper.ul? ? :ul : :ol).lf
       back_array.each do |element|
-        li_text = HtmlRubyUtil.highlight_comment(to_html_nbsp(element))
+        li_text = @highlighter.highlight_all(to_html_nbsp(element))
         html_builder_back.li.text(li_text).li_e.lf
       end
       html_builder_back
@@ -221,7 +222,7 @@ class HtmlHelper
   def highlight_code(array)
     return array.inject('') do |result, element|
       result += "\n" unless result.empty?
-      highlighted = HtmlRubyUtil.highlight_all(to_html_raw(element))
+      highlighted = @highlighter.highlight_all(to_html_raw(element))
       
       if result.end_with? "</span>\n" and highlighted.start_with? "<span"
         result += HtmlBuilder::BR + highlighted
