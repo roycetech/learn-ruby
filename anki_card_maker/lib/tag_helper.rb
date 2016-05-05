@@ -65,7 +65,7 @@ class TagHelper
   end
 
   def code_front?
-    @tags.include?'Code(Front)'
+    @tags.include?'Code(Front)' or @tags.include?'Annotation'
   end
 
   def ol?

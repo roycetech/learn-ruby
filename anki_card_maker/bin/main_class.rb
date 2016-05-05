@@ -9,7 +9,10 @@ require 'logger'
 require 'CSV'
 
 
+# Hard Code language in html_helper  blech!
+
 class MainClass
+
 
   $logger = Logger.new(STDOUT)
 
@@ -22,6 +25,7 @@ class MainClass
   end
 
 
+  @@highlighter = BaseHighlighter.java
   @@untagged_count = 0
 
 
@@ -32,7 +36,9 @@ class MainClass
     hash = {
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/ruby/Ruby-Keyword.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/mean/Mean-NPM.txt'
-      :source_file => '/Users/royce/Dropbox/Documents/Reviewer/@test.txt'
+      # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/@test.txt'
+      # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/Web Service.txt'
+        :source_file => '/Users/royce/Dropbox/Documents/Reviewer/java/EJB/JavaEE-EJB-II.txt'
       # :source_file => '/Users/royce/Dropbox/Documents/Reviewer/design/UML.txt'
     }.merge(opts);
 
@@ -55,6 +61,13 @@ class MainClass
       '%02d' % today.min]
   end
 
+  def pbcopy(input)
+   str = input.to_s
+   IO.popen('pbcopy', 'w') { |f| f << str }
+   str
+  end
+
+
   def execute
     $logger.info 'Program Start. Unit Test: %s' % ($unit_test ? 'Y' : 'n')
     return if $unit_test 
@@ -71,7 +84,9 @@ class MainClass
         @reviewer.print_card_count
         @reviewer.show_multi
 
-        puts('', @@outputFilename[@@outputFilename.rindex('/') + 1..@@outputFilename.index('.') - 1], '')
+        deckname = @@outputFilename[@@outputFilename.rindex('/') + 1..@@outputFilename.index('.') - 1]
+        pbcopy deckname
+        puts('', deckname , '')
       end
     end
   end
@@ -85,7 +100,7 @@ class MainClass
     shown_tags = tag_helper.visible_tags
     @reviewer.count_sentence(tag_helper, front, back)
 
-    html_helper = HtmlHelper.new(tag_helper, front, back)
+    html_helper = HtmlHelper.new(@@highlighter, tag_helper, front, back)
         
     @reviewer.detect_sellouts(front, back) unless tag_helper.is_front_only?
 
@@ -98,9 +113,9 @@ class MainClass
     end
 
     if $logger.debug?
-      # $logger.debug("Front: \n" + lst[0] + "\n\n")
+      $logger.debug("Front: \n" + lst[0] + "\n\n")
       $logger.debug("Back: \n" + lst[1] + "\n\n")
-      # @@logger.debug("Tag: \n" + lst[2] + "\n\n")
+      # $logger.debug("Tag: \n" + lst[2] + "\n\n")
     end
 
     @reviewer.addFrontCard(tags, front)

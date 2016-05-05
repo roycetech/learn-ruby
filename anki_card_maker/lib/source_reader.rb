@@ -47,6 +47,11 @@ class SourceReader
           front, back, tags = [], [], []
         else
 
+          # Check for mistyped @TagS
+          if line[0, 7].downcase == '@tags: ' and line[0, 7] != '@Tags: '
+            $logger.warn('Misspelled @Tags: @Line' || __LINE__)
+          end
+
           if line[0, 7] == '@Tags: '
             tags = TagHelper.parse(line)
           elsif tags.include? 'Abbr'

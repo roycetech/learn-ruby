@@ -13,15 +13,18 @@ class KeywordHighlighter
   end
 
 
-  def initialize(keywords)
-    raise 'Keywords required' unless keywords and not keywords.empty?
+  def initialize(keywords, comment_prefix)    
+    raise 'Keywords required' unless keywords and not keywords.empty? and 
+      not comment_prefix.empty?
     @keywords = keywords
+    @comment_prefix = comment_prefix
+    
   end
 
 
   def highlight(input_string)
     @keywords.each do |keyword|
-      comment_index = ObjUtil.nvl(input_string.index('# '), 10_000)  # Dummy max value.
+      comment_index = ObjUtil.nvl(input_string.index(@comment_prefix), 10_000)  # Dummy max value.
       keyword_index = ObjUtil.nvl(input_string.index(keyword), -1)
 
       non_comment = keyword_index <= comment_index

@@ -20,17 +20,15 @@ class BaseHighlighter
   end
 
 
-  def self.ruby
-    return RubyHighlighter.new
-  end
-
-  def self.js
-    return JsHighlighter.new
-  end
+  # Factory methods.
+  def self.ruby() return RubyHighlighter.new; end
+  def self.js() return JsHighlighter.new; end
+  def self.cpp() return CppHighlighter.new; end
+  def self.java() return JavaHighlighter.new; end
 
 
   def initialize
-    @keyword_highlighter = KeywordHighlighter.new get_keywords
+    @keyword_highlighter = KeywordHighlighter.new(get_keywords, comment_marker)
   end
   private :initialize
 
@@ -58,9 +56,7 @@ class BaseHighlighter
 
 
   # Override for any 
-  def highlight_lang_specific(input_string)
-  end
-
+  def highlight_lang_specific(input_string) end
 
   def highlight_keywords(input_string)
     return @keyword_highlighter.highlight(input_string)
@@ -69,15 +65,17 @@ class BaseHighlighter
 
   # Highlight single in double, or double in single quotes.
   def highlight_quoted(input_string)
-    pattern = %r{(["'])(\\\1|[^\1]*?)\1}
+    pattern = %r{((["'])(\\\1|[^\1]*?)\1)(?![^<]*>|[^<>]*<\/)}
+    # pattern = %r{(["'])(\\\1|[^\1]*?)\1}
     input_string.gsub!(pattern, @@html_color.quote('\1\2\1'))
     return input_string
   end
 
 
   # Highlight double quotes only.
-  def highlight_dblquoted(input_string)
-    pattern = %r{(")(\\\1|[^\1]*?)\1}
+  def highlight_dblquoted(input_string)    
+    pattern = %r{((")(\\\1|[^\1]*?)\1)(?![^<]*>|[^<>]*<\/)}
+    # pattern = %r{(")(\\\1|[^\1]*?)\1}
     input_string.gsub!(pattern, @@html_color.quote('\1\2\1'))
     return input_string
   end
@@ -137,3 +135,9 @@ end
 
 require './lib/highlighter_ruby'
 require './lib/highlighter_js'
+require './lib/highlighter_cpp'
+require './lib/highlighter_java'
+require './lib/highlighter_swift'
+# require './lib/highlighter_sql'
+require './lib/highlighter_plsql'
+

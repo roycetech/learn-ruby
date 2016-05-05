@@ -15,23 +15,24 @@ class HtmlHelper
   HEC_GT = '&gt;'
 
 
-  ANSWER_ONLY_HTML = HtmlBuilder.new
-    .span('answer_only').text('Answer Only').span_e.lf
-
-
   attr_reader :front_html, :back_html
 
 
-  def initialize(tag_helper, front_array, back_array)
+  def initialize(highlighter, tag_helper, front_array, back_array)
 
     @tag_helper = tag_helper
-    @highlighter = BaseHighlighter.js
+    @highlighter = highlighter
 
     #  Step 1: Common Style
     style_common = HtmlBuilder.new
       .style
-        .select('div')
+        .select('.main')
           .text_align('left')
+        .select_e
+        .select('code')
+          .font_family("'Courier New'")
+          .background_color('#F1F1F1')
+          .border_radius('5px')
         .select_e
 
     shown_tags = tag_helper.visible_tags
@@ -83,14 +84,15 @@ class HtmlHelper
 
     #  Step 3: Common HTML
     html_builder_common2 = HtmlBuilder.new
-      .div.lf
+      .div('main').lf
 
     tags = build_tags(back_array)
     
     # Process Front Card Html
     html_builder_front.merge(html_builder_common2)
 
-    unless tag_helper.is_back_only?
+    has_visible_tag = !tag_helper.visible_tags.empty?    
+    unless tag_helper.is_back_only? or not has_visible_tag
       html_builder_front.merge(tags)
     end
 
@@ -112,10 +114,6 @@ class HtmlHelper
           .div.lf
             .code('command')
 
-        # front_array.each do |element|
-        #   html_builder_front.text(element).lf
-        # end
-
         html_builder_front.text(front_array.inject('') do |result, element|
           result += HtmlBuilder::BR + "\n" unless result.empty?
           result += to_html_raw(element)
@@ -125,8 +123,8 @@ class HtmlHelper
           .code_e.lf
           .div_e.lf
     else
-      
-      html_builder_front.br.text(front_array.inject('') do |result, element|
+      html_builder_front.br if has_visible_tag
+      html_builder_front.text(front_array.inject('') do |result, element|
         result += HtmlBuilder::BR + "\n" unless result.empty?
         result += to_html_raw(element)
       end).lf
@@ -135,19 +133,26 @@ class HtmlHelper
 
     # Process Back Card Html
     html_builder_back.merge(html_builder_common2)
-    # unless tag_helper.is_front_only?
-    #   html_builder_back.merge(tags.br)
-    # end
+
+    unless tag_helper.is_front_only? or not has_visible_tag
+      html_builder_back.merge(tags)
+    end
 
     if tag_helper.has_enum?
-      html_builder_back
-        .code.lf
+      # html_builder_back
+      #   .code.lf
 
       html_builder_back.__send__(tag_helper.ul? ? :ul : :ol).lf
-      back_array.each do |element|
-        li_text = @highlighter.highlight_all(to_html_nbsp(element))
+
+      back_array.each do |element|        
+        if tag_helper.code_back?
+          li_text = @highlighter.highlight_all(to_html_nbsp(element))
+        else
+          li_text = to_html_nbsp(element)
+        end
         html_builder_back.li.text(li_text).li_e.lf
       end
+
       html_builder_back
         .__send__(tag_helper.ul? ? :ul_e : :ol_e).lf
         .code_e.lf
@@ -177,27 +182,37 @@ class HtmlHelper
     
     else
 
+      html_builder_back.br if has_visible_tag and not tag_helper.is_front_only?
       html_builder_back.text(back_array.inject('') do |result, element|
-
-        result += HtmlBuilder::BR + "\n" unless result.empty?
+        result += (HtmlBuilder::BR + "\n") unless result.empty?
         result += to_html_raw(element)
       end).lf
+      
     end
 
 
-
     if tag_helper.is_front_only?
-      backAnswer = ANSWER_ONLY_HTML.clone
+      backAnswer = HtmlBuilder.new
+        .span('answer_only').text('Answer Only').span_e.lf
+
+      # $logger.debug(html_builder_back.build)
+      html_builder_back.br.br unless tag_helper.has_enum?
+
       backAnswer.insert(HtmlBuilder::Tag_BR)  if html_builder_back.last_tag == HtmlBuilder::Tag_Span_E or html_builder_back.last_element == 'text'
       html_builder_back.merge(backAnswer)
     end
 
     if tag_helper.is_back_only?
-      frontAnswer = ANSWER_ONLY_HTML.clone
+      frontAnswer = HtmlBuilder.new
+        .span('answer_only').text('Answer Only').span_e.lf
+
+      html_builder_front.br.br unless tag_helper.has_enum?
+
       frontAnswer.insert(HtmlBuilder::Tag_BR)  if html_builder_front.last_tag == HtmlBuilder::Tag_Span_E or html_builder_front.last_element == 'text'
       html_builder_front.merge(frontAnswer)
     end
   
+
     @front_html = html_builder_front.div_e.lf.build
     @back_html = html_builder_back.div_e.lf.build
   end
@@ -237,6 +252,7 @@ class HtmlHelper
     return string
     .gsub('<', HEC_LT)
     .gsub('>', HEC_GT)
+    .gsub(/`([a-zA-Z_ ]+(\(\w*(?: \w*)*(?:, \w*(?: \w*)*)*\))?)`/, '<code>\1</code>')
   end
 
   # escape angles, and spaces

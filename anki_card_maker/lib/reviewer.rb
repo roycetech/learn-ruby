@@ -41,6 +41,7 @@ class Reviewer
             element.downcase
               .gsub('.h', 'h')  # c header.
               .gsub('e.g.', 'eg')
+              .gsub(/(?:[a-zA-Z]*)(?:\.[a-zA-Z]+)+/, 'javapackage')
               .gsub('i.e', 'ie')
               .gsub('...', '')
               .gsub('..', '')

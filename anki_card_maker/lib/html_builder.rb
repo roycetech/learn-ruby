@@ -1,5 +1,5 @@
 require './lib/style_builder'
-require 'logger'
+
 
 # end tags have the format tag_e
 # if end tag, new line is appended when value is true
@@ -15,17 +15,6 @@ class HtmlBuilder
   BR = '<br />'
   ESP = '&nbsp;'
   LF = "\n"
-
-
-  @@logger = Logger.new(STDOUT)
-  
-
-  @@logger.formatter = proc do |severity, datetime, progname, msg|
-    # subscript 3 for eclipse/commandline, 4 for sublime 2
-    line = caller[3]
-    source = line[line.rindex('/', -1)+1 .. -1]
-    "#{severity} #{source} - #{msg}\n"
-  end
 
 
   # last_element includes text and br
@@ -51,18 +40,11 @@ class HtmlBuilder
     return_value
   end
 
-
   def style
     raise 'You cannot style twice!' if @styled
     @styled = true
     return StyleBuilder.new(self)
   end
-
-  # # when you accidentally try to add a new style to an html builder instead of style_builder.
-  # def select(selector)
-  #   return StyleBuilder.new(self).select(selector)
-  # end
-
 
   # Accepts html another HtmlBuilder or StyleBuilder.
   # Style should come first! :)
@@ -86,7 +68,8 @@ class HtmlBuilder
       raise 'Second builder cannot have a style' if builder.styled
 
       @styled ||= builder.styled
-      unless @tags.last == 'lf'
+      
+      unless @tags.last == 'lf' or @tags.last == 'br'
         @tags.push('lf')
         @values.push nil
       end
@@ -135,7 +118,7 @@ class HtmlBuilder
       when 'lf' then
         return_value += LF
       when 'br' then
-        return_value.chomp!
+        return_value.chomp! unless return_value.end_with?(BR + LF)
         return_value += BR + LF
       when 'text' then
         return_value += value
@@ -183,9 +166,7 @@ class HtmlBuilder
     end    
   end
 
-  def size
-    return @values.size
-  end
+  def size() return @values.size; end
 
   def insert(tag, value=nil)
     @tags.insert(0, tag)
@@ -205,40 +186,3 @@ class HtmlBuilder
   end
 
 end
-
-
-# puts HtmlBuilder.new
-#   .div('main').lf
-#     .code.lf
-#       .span.text('Hello').span_e.space.span.text('World').span_e.lf
-#   .code_e.lf
-#   .div_e
-# .build
-# puts
-
-
-# two = HtmlBuilder.new
-#   .div.lf
-#     .ol.lf
-#       .li.text('Item 2').li_e.lf
-#     .ol_e.lf
-#     .pre.text('Pre formatted 2').pre_e.lf
-#   .div_e
-#
-# three = HtmlBuilder.new
-#   .style
-#     .select('.tag')
-#       .color('red')
-#     .select_e
-#     .select('pre')
-#       .padding('5px')
-#     .select_e
-#   .style_e
-#   .div.lf
-#     .ol.lf
-#       .li.text('Item').li_e.lf
-#     .ol_e.lf
-#     .pre.text('Pre formatted').pre_e.lf
-#   .div_e
-
-# puts three.merge_builder(two).build
