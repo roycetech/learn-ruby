@@ -10,4 +10,6 @@ target
 build
 .idea
 skeleton
+coverage/
+
 
