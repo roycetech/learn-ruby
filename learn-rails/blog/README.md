@@ -9,7 +9,8 @@ Project Features:
 01. Basic CRUD
 02. MVC
 03. Validation
-04. Form Submission with redirect.
+04. Form Submission with redirect
+05. Partials - reusable view section
 
 
 
