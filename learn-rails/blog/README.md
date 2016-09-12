@@ -1,7 +1,7 @@
 Overview:
 =========
 
-This project is from a guide found at (http://guides.rubyonrails.org/getting_started.html)
+This project is from a guide found at http://guides.rubyonrails.org/getting_started.html
 
 
 Project Features:
