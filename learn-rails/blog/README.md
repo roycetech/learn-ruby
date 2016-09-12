@@ -14,6 +14,7 @@ Project Features:
 05. Partials - reusable view section
 06. REST 
 07. Table one to many association
+08. Cascade delete
 
 
 # README
