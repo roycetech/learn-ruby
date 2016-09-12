@@ -1,17 +1,19 @@
 Overview:
 =========
 
-This project is from [http://guides.rubyonrails.org/getting_started.html](this) guide: 
+This project is from [this](http://guides.rubyonrails.org/getting_started.html) guide: 
 
 
 Project Features:
 =================
+
 01. Basic CRUD
 02. MVC
 03. Validation
 04. Form Submission with redirect
 05. Partials - reusable view section
-
+06. REST 
+07. Table one to many association
 
 
 # README
