@@ -19,7 +19,7 @@ Project Features:
 10. Twitter Bootstrap
 11. Display Relative Creation Time
 12. Live-Reload on changes to `view/` folder
-13. Passing variable to a partial page.
+13. Passing local variable to a partial page.
 
 
 

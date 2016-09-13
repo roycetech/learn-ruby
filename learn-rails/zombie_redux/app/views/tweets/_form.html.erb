@@ -5,7 +5,7 @@
     <div id="error_explanation" class="alert alert-danger">
       <h2>
         <%= pluralize(@zombie.errors.count, "error") %> prohibited
-        this corpse from being reanimated:
+        this zombie from being heard:
       </h2>
       <ul>
         <% @zombie.errors.full_messages.each do |msg| %>
@@ -15,8 +15,9 @@
     </div>
   <% end %>
 
+
   <div class="input-group">
-    <%= f.text_field :status, class: 'form-control', placeholder: 'Say something' %>
+    <%= f.text_field :status, class: 'form-control', placeholder: 'New status' %>
       <span class="input-group-btn">
         <%= f.submit 'Post Tweet', class: 'btn btn-default' %>
       </span>

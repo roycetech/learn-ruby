@@ -1,7 +1,6 @@
 <tr>
   <td><%= tweet.status %></td>
-  <%= post_time = tweet
-    render partial: 'tweets/post_time', object: post_time %>
+  <%= render partial: 'tweets/post_time', locals: { tweet: tweet } %>
   <td>
     <%= link_to 'Delete', [tweet.zombie, tweet],
       method: :delete,

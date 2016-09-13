@@ -12,7 +12,17 @@ class Zombie < ApplicationRecord
     presence: true,
     length: { minimum: 3 }
 
-  validates_associated :tweets, :weapons
+  # validates_associated :tweets, :weapons
+
+  validate do |zombie|
+    errors[:base].clear
+    zombie.tweets.each do |tweet|
+      next if tweet.valid?
+      puts tweet.errors.inspect
+      puts tweet.errors[:messages]
+      errors[:base] << tweet.errors.full_messages[0]
+    end
+  end
 
 
 end

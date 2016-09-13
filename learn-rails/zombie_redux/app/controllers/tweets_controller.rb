@@ -2,15 +2,7 @@ class TweetsController < ApplicationController
 
 
   before_action :get_tweet , only: [:edit, :update, :destroy, :show]
-  before_action :check_auth , :only => [:edit, :update, :destroy]
-
-
-  def check_auth
-    if session[:zombie_id] != @tweet.zombie_id
-      flash[:notice] = "Sorry, you can’t edit this tweet"
-      redirect_to tweets_path
-    end 
-  end
+  # before_action :check_auth , :only => [:edit, :update, :destroy]
 
 
   def index
@@ -50,20 +42,12 @@ class TweetsController < ApplicationController
     
     @zombie.tweets.create(tweet_params)
 
-    # new_tweet = Tweet.create(tweet_params)
-    # puts new_tweet.valid?
-
-    # puts @zombie.valid?
-    # puts @zombie.errors.messages
-
-    # if new_tweet.valid?
     if @zombie.valid?
       redirect_to zombie_path(@zombie)
     else
-      puts "New tweet invalid!"
-      # render zombies_path(@zombie)      
       render 'zombies/show'
     end
+    
   end
 
 
@@ -72,6 +56,10 @@ class TweetsController < ApplicationController
 
 
   def destroy
+    @zombie = Zombie.find(params[:zombie_id])
+    @tweet = @zombie.tweets.find(params[:id])
+    @tweet.destroy
+    redirect_to zombie_path(@zombie)
   end
 
 
@@ -85,6 +73,12 @@ class TweetsController < ApplicationController
     params.require(:tweet).permit(:status)
   end
 
+  def check_auth
+    if session[:zombie_id] != @tweet.zombie_id
+      flash[:notice] = "Sorry, you can’t edit this tweet"
+      redirect_to tweets_path
+    end 
+  end
 
 
 end

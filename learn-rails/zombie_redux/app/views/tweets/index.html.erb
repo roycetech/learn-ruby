@@ -11,7 +11,9 @@
   <tr>
     <td><%= tweet.status %></td>
     <td><%= link_to tweet.zombie.name, zombie_path(tweet.zombie) %></td>    
-    <%= render partial: 'post_time', object: post_time %>
+
+    <%= render partial: 'post_time', locals: { tweet: tweet } %>
+
   </tr>
 <% end %>
 
