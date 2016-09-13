@@ -1,0 +1,21 @@
+<h1>Listing tweets</h1>
+
+<table class="table">
+  <tr>
+    <th>Status</th>
+    <th>Zombie</th>
+  </tr>
+<% @tweets.each do |tweet| %>
+  <tr>
+    <td><%= tweet.status %></td>
+    <td><%= link_to tweet.zombie.name, zombie_path(tweet.zombie) %></td>    
+  </tr>
+<% end %>
+</table>
+
+<% if @tweets.empty? %> 
+  <em>No tweets found</em><br>
+<% end %>
+
+
+<%= link_to 'Back', root_path %>

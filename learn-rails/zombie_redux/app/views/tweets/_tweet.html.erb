@@ -1,0 +1,15 @@
+<tr>
+  <td><%= tweet.status %></td>
+  <td>
+    <% if tweet.created_at > Time.now.beginning_of_day %>
+    <%= "#{time_ago_in_words(tweet.created_at)} ago"%>
+    <% else %>
+    <%= tweet.created_at.strftime("%b %d, %Y") %>
+    <% end %>        
+  </td>
+  <td>
+    <%= link_to 'Delete', [tweet.zombie, tweet],
+      method: :delete,
+      data: { confirm: 'Are you sure?' } %>        
+  </td>
+</tr>

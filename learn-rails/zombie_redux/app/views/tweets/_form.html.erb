@@ -1,0 +1,24 @@
+<%= form_for([@zombie, @zombie.tweets.build], html: { class: 'form-horizontal' })  do |f| %>
+
+  <% if f.object.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2>
+        <%= pluralize(@tweet.errors.count, "error") %> prohibited
+        this corpse from being reanimated:
+      </h2>
+      <ul>
+        <% @tweet.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="input-group">
+    <%= f.text_field :status, class: 'form-control', placeholder: 'Say something' %>
+      <span class="input-group-btn">
+        <%= f.submit 'Post Tweet', class: 'btn btn-default' %>
+      </span>
+    </div><!-- /input-group -->
+
+<% end %>
