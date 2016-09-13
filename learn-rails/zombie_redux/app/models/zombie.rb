@@ -12,4 +12,7 @@ class Zombie < ApplicationRecord
     presence: true,
     length: { minimum: 3 }
 
+  validates_associated :tweets, :weapons
+
+
 end

@@ -1,0 +1,11 @@
+    <td>
+      <% if post_time.created_at %>
+        <% if post_time.created_at > Time.now.beginning_of_day %>
+        <%= "#{ time_ago_in_words(post_time.created_at) } ago" %>
+        <% else %>
+        <%= post_time.created_at.strftime("%b %d, %Y") %>
+        <% end
+        else %>
+        &nbsp;
+        <% end %>
+    </td>

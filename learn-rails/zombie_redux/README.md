@@ -17,7 +17,9 @@ Project Features:
 08. Basic Authentication
 09. Pre-action method
 10. Twitter Bootstrap
-11. Display Creation Time
+11. Display Relative Creation Time
+12. Live-Reload on changes to `view/` folder
+13. Passing variable to a partial page.
 
 
 
@@ -32,7 +34,16 @@ Things you may want to cover:
 
 * Configuration
 
+- Use sunburst theme for sublime text 2
+
+
 * Database creation
+
+Preload data with
+```
+$ rails db:seed
+```
+
 
 * Database initialization
 

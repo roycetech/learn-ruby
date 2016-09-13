@@ -1,7 +1,7 @@
 <%= link_to 'Edit', edit_zombie_path(@zombie) %> | <%= link_to 'Back', zombies_path %>
 
 <p>
-  <h3><strong>Name: </string><%= @zombie.name %></h3>
+  <h3><strong>Name: </strong><%= @zombie.name %></h3>
 </p>
  
 <p>
@@ -25,13 +25,4 @@
   </tbody>
 </table>
 
-
 <%= render 'tweets/form' %>
-
-<hr>
-<h3>Weapons</h2>
-<%= render @zombie.weapons %>
-
-
-<h2>Add a weapon:</h2>
-<%= render 'weapons/form' %>

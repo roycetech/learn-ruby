@@ -4,13 +4,17 @@
   <tr>
     <th>Status</th>
     <th>Zombie</th>
+    <th>Post Time</th>
   </tr>
-<% @tweets.each do |tweet| %>
+
+<% @tweets.each do |tweet| post_time = tweet %>
   <tr>
     <td><%= tweet.status %></td>
     <td><%= link_to tweet.zombie.name, zombie_path(tweet.zombie) %></td>    
+    <%= render partial: 'post_time', object: post_time %>
   </tr>
 <% end %>
+
 </table>
 
 <% if @tweets.empty? %> 

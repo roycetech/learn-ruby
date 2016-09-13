@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ZombieRedux</title>
+    <title>Rails for Zombies Redux</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -25,7 +25,7 @@
 
   <div class="container">
     <% if flash[:notice] %>
-    <div id="notice"><%= flash[:notice] %></div>
+    <div id="notice" class="alert alert-warning"><%= flash[:notice] %></div>
     <% end %>
     
     <%= yield %>

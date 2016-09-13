@@ -44,15 +44,26 @@ class TweetsController < ApplicationController
     end 
   end
 
-  def create
-    @tweet = Tweet.new(tweet_params)
-   
-    if @tweet.save
-      redirect_to zombie_path(@tweet.zombie)
-    else
-      render action: 'show', controller: :zombie
-    end
 
+  def create
+    @zombie = Zombie.find(params[:zombie_id])
+    
+    @zombie.tweets.create(tweet_params)
+
+    # new_tweet = Tweet.create(tweet_params)
+    # puts new_tweet.valid?
+
+    # puts @zombie.valid?
+    # puts @zombie.errors.messages
+
+    # if new_tweet.valid?
+    if @zombie.valid?
+      redirect_to zombie_path(@zombie)
+    else
+      puts "New tweet invalid!"
+      # render zombies_path(@zombie)      
+      render 'zombies/show'
+    end
   end
 
 
