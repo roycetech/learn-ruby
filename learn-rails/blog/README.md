@@ -12,9 +12,10 @@ Project Features:
 03. Validation
 04. Form Submission with redirect
 05. Partials - reusable view section
-06. REST 
+06. REST
 07. Table one to many association
 08. Cascade delete
+09. Basic Authentication
 
 
 # README
