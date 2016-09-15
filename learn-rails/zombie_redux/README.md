@@ -21,6 +21,7 @@ Project Features:
 12. Live-Reload on changes to `view/` folder
 13. Passing local variable to a partial page.
 14. RSpec from CodeSchool course
+15. Configured RSpec to mock with mocha
 
 
 This README would normally document whatever steps are necessary to get the
