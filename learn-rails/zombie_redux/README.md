@@ -1,7 +1,7 @@
 Overview:
 =========
 
-This project is based on the CodeSchool course [Rails for Zombies Redux](https://www.codeschool.com/courses/rails-for-zombies-redux) 
+This project is based on the CodeSchool course [Rails for Zombies Redux](https://www.codeschool.com/courses/rails-for-zombies-redux) and [Testing with RSpec](https://www.codeschool.com/courses/testing-with-rspec)
 
 
 Project Features:
@@ -20,7 +20,7 @@ Project Features:
 11. Display Relative Creation Time
 12. Live-Reload on changes to `view/` folder
 13. Passing local variable to a partial page.
-
+14. RSpec from CodeSchool course
 
 
 This README would normally document whatever steps are necessary to get the
