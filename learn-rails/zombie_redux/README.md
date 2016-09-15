@@ -48,7 +48,18 @@ $ rails db:seed
 
 * Database initialization
 
+* How to setup rspec and mocha test.
+
+- Modify `Gemfile` to include `rspec-rails`
+  and `mocha` under the group `:development`, `:test`
+- run the command `$ bundle install`
+- run the command `rails generate rspec:install`
+- require the `spec/rails_helper`
+
+
+
 * How to run the test suite
+
 
 * Services (job queues, cache servers, search engines, etc.)
 
