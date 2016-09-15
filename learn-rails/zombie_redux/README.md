@@ -20,8 +20,15 @@ Project Features:
 11. Display Relative Creation Time
 12. Live-Reload on changes to `view/` folder
 13. Passing local variable to a partial page.
-14. RSpec from CodeSchool course
-15. Configured RSpec to mock with mocha
+
+Testing Features:
+-----------------
+
+01. RSpec from CodeSchool course
+02. Configured RSpec to mock with mocha
+03. Matcher using regular expression
+04. Checkig an item to be part of a collection
+
 
 
 This README would normally document whatever steps are necessary to get the
@@ -50,8 +57,7 @@ $ rails db:seed
 
 * How to setup rspec and mocha test.
 
-- Modify `Gemfile` to include `rspec-rails`
-  and `mocha` under the group `:development`, `:test`
+- Modify `Gemfile` to include `rspec-rails`, `mocha`, `rspec-collection_matchers` under the group `:development`, `:test`
 - run the command `$ bundle install`
 - run the command `rails generate rspec:install`
 - require the `spec/rails_helper`

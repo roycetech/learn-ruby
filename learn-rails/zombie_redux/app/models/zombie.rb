@@ -24,5 +24,8 @@ class Zombie < ApplicationRecord
     end
   end
 
+  def hungry?
+    true 
+  end
 
 end
