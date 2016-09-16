@@ -1,7 +1,10 @@
 class Zombie < ApplicationRecord
 
+  attr_accessor :status, :email
+
   has_many :tweets , dependent: :destroy
   has_many :weapons, dependent: :destroy
+  # has_one :weapon, dependent: :destroy
 
   validates :name, 
     presence: true,
@@ -24,8 +27,12 @@ class Zombie < ApplicationRecord
     end
   end
 
-  def hungry?
-    true 
+  def weapon
+    Weapon.new
+  end
+
+  def decapitate
+    @status = 'dead again'
   end
 
 end

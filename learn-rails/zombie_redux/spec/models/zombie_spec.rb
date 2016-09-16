@@ -20,6 +20,9 @@ describe Zombie do
     zombie.tweets.should include(tweet2)
   end
 
+  its('tweets.size') { should == 0 }
+
+
   it 'starts with no weapon' do
     zombie = Zombie.new(name: 'Ash')
     zombie.should have(0).weapons
@@ -37,12 +40,6 @@ describe Zombie do
     expect { zombie.save! }.to raise_error(ActiveRecord::RecordInvalid)
     # other modifiers: not_to, to_not
   end
-
-  it 'can get hungry' do
-    zombie = Zombie.new
-    expect(zombie).to respond_to(:hungry?)
-  end
-
 
   # Other Matchers: 
   # be_within(<range>).of(<expected>)

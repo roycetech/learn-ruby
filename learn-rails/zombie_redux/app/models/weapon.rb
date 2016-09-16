@@ -10,4 +10,6 @@ class Weapon < ApplicationRecord
     presence: true,
     length: {minimum: 1, maximum: 10}
 
+    def slice() end
+
 end

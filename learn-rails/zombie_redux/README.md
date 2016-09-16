@@ -3,6 +3,8 @@ Overview:
 
 This project is based on the CodeSchool course [Rails for Zombies Redux](https://www.codeschool.com/courses/rails-for-zombies-redux) and [Testing with RSpec](https://www.codeschool.com/courses/testing-with-rspec)
 
+To Learn RSpec, visit the other project zombie\_rpsec for a basic non-rails examples.
+
 
 Project Features:
 =================
@@ -57,9 +59,9 @@ $ rails db:seed
 
 * How to setup rspec and mocha test.
 
-- Modify `Gemfile` to include `rspec-rails`, `mocha`, `rspec-collection_matchers` under the group `:development`, `:test`
+- Make sure the gem file have the test gems.
 - run the command `$ bundle install`
-- run the command `rails generate rspec:install`
+- Inside the rails application root folder, run the command `rails generate rspec:install`
 - require the `spec/rails_helper`
 
 
