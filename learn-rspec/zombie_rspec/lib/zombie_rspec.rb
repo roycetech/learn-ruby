@@ -23,9 +23,14 @@ class Zombie
     @craving
   end
 
-  def hungry?
+  def hungry? 
     @hungry
   end
+
+  def hungry!
+    @hungry  = true
+  end
+
 
   def eat(brains)
     @hungry = false

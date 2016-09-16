@@ -1,11 +1,12 @@
 class Zombie
 
-  attr_accessor :name, :brains, :alive, :rotting, :headless, :vegetarian, :craving, :weapons
+  attr_accessor :name, :brains, :alive, :rotting, :headless, :vegetarian, :craving, :weapons, :pulse
 
   def initialize(opts = {})
     @name = opts[:name] || 'Ash'
     @weapons = opts[:weapons] || []
     @brains = 0
+    @pulse = false
     @alive = false
     @rotting = true
     @headless = false
@@ -19,7 +20,6 @@ class Zombie
   def hungry?() true end
 
   def swing(weapon) weapon && true end
-
 
 
 end
