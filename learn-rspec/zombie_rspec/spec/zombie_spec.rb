@@ -1,4 +1,3 @@
-require 'spec_helper'
 require 'zombie'
 
 describe Zombie do
@@ -39,9 +38,5 @@ describe Zombie do
   it 'is smart' do 
     pending 'Another example of pending'
   end
-
-
-
-
 
 end
