@@ -1,4 +1,5 @@
 class Tweet
+  
   attr_accessor :status
 
   def initialize(options={})

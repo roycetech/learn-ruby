@@ -35,8 +35,14 @@ describe Zombie do
   # 1. How do define a pending test.
   xit 'is in love'
 
+  # 2. Another way to mark as pending, but is tagged as failed by spec runner.
   it 'is smart' do 
     pending 'Another example of pending'
+  end
+
+  it 'can get hungry' do
+    zombie = Zombie.new
+    expect(zombie).to respond_to(:hungry?)
   end
 
 end
