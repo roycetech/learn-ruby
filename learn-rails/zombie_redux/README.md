@@ -30,7 +30,13 @@ Testing Features:
 02. Configured RSpec to mock with mocha
 03. Matcher using regular expression
 04. Checkig an item to be part of a collection
+05. Custom Matcher with Failure Messages.
 
+
+Issues:
+--------
+
+Level 5 Fails miserably, outdated useless tutorial codes.
 
 
 This README would normally document whatever steps are necessary to get the

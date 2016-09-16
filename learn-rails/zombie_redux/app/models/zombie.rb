@@ -7,7 +7,7 @@ class Zombie < ApplicationRecord
   # has_one :weapon, dependent: :destroy
 
   validates :name, 
-    presence: true,
+    presence: { message: 'been eaten'},
     uniqueness: true, 
     length: { minimum: 3 }
 
