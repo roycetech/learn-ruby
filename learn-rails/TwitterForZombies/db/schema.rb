@@ -10,16 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160917065549) do
+ActiveRecord::Schema.define(version: 20160917083402) do
 
-  create_table "zombies", force: :cascade do |t|
-    t.string   "name"
-    t.text     "bio"
-    t.integer  "age"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.string   "email"
-    t.boolean  "rotting",    default: false
+  create_table "tweets", force: :cascade do |t|
+    t.string   "message"
+    t.integer  "zombie_id"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "privacy"
+    t.string   "location",      limit: 30
+    t.boolean  "show_location",            default: false
   end
 
 end
