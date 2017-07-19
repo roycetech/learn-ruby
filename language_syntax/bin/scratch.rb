@@ -1,1 +1,0 @@
-puts __ENCODING__
