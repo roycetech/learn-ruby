@@ -7,7 +7,7 @@ describe Zombie do
   let(:zombie) { Zombie.create }
 
   context "#decapitate" do
-    
+
     it 'calls weapon.slice' do
       zombie.weapon.should_receive(:slice)
       zombie.decapitate
@@ -29,5 +29,4 @@ describe Zombie do
   # it 'decapitates' do
   #   zombie.weapon.stub(:slice)
   # end
-
 end

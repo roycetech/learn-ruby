@@ -1,5 +1,6 @@
-require './lib/zombie'
+# frozen_string_literal: true
 
+require './lib/zombie'
 
 # This example demonstrates the tag :focus, and :vegan
 # run with: rspec --tag vegan spec/44_metadata_and_filter_spec.rb

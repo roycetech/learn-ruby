@@ -2,9 +2,7 @@
 require 'zombie_rspec'
 require 'weapon'
 
-
 describe Zombie do
-
   let(:zombie) { Zombie.new }
 
   before { zombie.hungry! }
@@ -21,6 +19,4 @@ describe Zombie do
     it 'still craves brains'
     it 'craves vegan brains'
   end
-
-
-end  # class
+end
